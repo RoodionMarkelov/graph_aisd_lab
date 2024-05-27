@@ -169,7 +169,18 @@ public:
 	size_t degree(const Vertex& v) const { //степень вершины
 		if (!has_vertex(v)) throw runtime_error("Vertex is not exist.");
 		else {
-			return _graph[v].size();
+			size_t degree = _graph.at(v).size();
+			for (auto& [vertex, edges] : _graph) {
+				if (vertex == v) continue;
+				else {
+					for (auto edge : edges) {
+						if (edge._to_id == v) {
+							degree += 1;
+						}
+					}
+				}
+			}
+			return degree;
 		}
 	}
 
@@ -275,6 +286,23 @@ public:
 			walked[u]._color == "black";
 		}
 		return result_of_walking;
+	}
+
+	Vertex find_max_average_distance() {
+		Vertex max_average = _graph.begin()->first;
+		Distance max_average_dist = _graph.begin()->second.begin()->_distance;
+		for (auto i : _graph) {
+			Distance average_dist = 0;
+			for (auto edge : _graph[i.first]) {
+				average_dist += edge._distance;
+			}
+			average_dist /= _graph[i.first].size();
+			if (max_average_dist < average_dist) {
+				max_average = i.first;
+				max_average_dist = average_dist;
+			}
+		}
+		return max_average;
 	}
 };
 
