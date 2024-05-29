@@ -7,6 +7,20 @@ using namespace std;
 
 int main()
 {
+	Graph<string, double> graph_s;
+	graph_s.add_vertex("a");
+	graph_s.add_vertex("b");
+	graph_s.add_vertex("c");
+	graph_s.add_vertex("d");
+	graph_s.add_vertex("e");
+	graph_s.add_edge("a", "c", 7.5);
+	graph_s.add_edge("c", "d", 1.0);
+	graph_s.add_edge("e", "b", 2.7);
+	graph_s.add_edge("c", "e", 1.45);
+	graph_s.add_edge("b", "a", 17.25);
+	graph_s.add_edge("d", "b", 3.89);
+	cout << graph_s << endl;
+
 	Graph<int, double> graph1;
 	graph1.add_vertex(1);
 	graph1.add_vertex(2);
@@ -59,7 +73,7 @@ int main()
 	cout << graph1.remove_edge(1, Graph<int, double>::Edge(2, 3.75)) << ' ' << graph1.remove_edge(2, Graph<int, double>::Edge(2, 1.45)) << ' ' << graph1.remove_edge(4, Graph<int, double>::Edge(2, 3.89)) << endl;
 	cout << graph1 << endl;
 
-	/*cout << "Test walk(start vertex)" << endl;
+	cout << "Test walk(start vertex)" << endl;
 	Graph<int, double> graph2;
 	graph2.add_vertex(1);
 	graph2.add_vertex(2);
@@ -125,7 +139,7 @@ int main()
 
 	cout << "Test task(start vertex)" << endl;
 	int vert = graph2.find_max_average_distance();
-	cout << vert << endl;*/
+	cout << vert << endl;
 
 	return 0;
 }

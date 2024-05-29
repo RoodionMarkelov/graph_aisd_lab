@@ -169,9 +169,11 @@ public:
 	size_t degree(const Vertex& v) const { //степень вершины
 		if (!has_vertex(v)) throw runtime_error("Vertex is not exist.");
 		else {
-			size_t degree = _graph.at(v).size();
+			size_t degree = 0;
 			for (auto& [vertex, edges] : _graph) {
-				if (vertex == v) continue;
+				if (vertex == v) {
+					degree += _graph.at(vertex).size();
+				}
 				else {
 					for (auto edge : edges) {
 						if (edge._to_id == v) {
@@ -288,15 +290,34 @@ public:
 		return result_of_walking;
 	}
 
-	Vertex find_max_average_distance() {
-		Vertex max_average = _graph.begin()->first;
-		Distance max_average_dist = _graph.begin()->second.begin()->_distance;
-		for (auto i : _graph) {
-			Distance average_dist = 0;
-			for (auto edge : _graph[i.first]) {
-				average_dist += edge._distance;
+	Distance average_distance(const Vertex& v) {
+		Distance all_distance = 0;
+		size_t count = 0;
+		for (auto& [vertex, edges] : _graph) {
+			if (vertex == v) {
+				for (auto edge : _graph[vertex]) {
+					all_distance = edge._distance;
+					count++;
+				}
 			}
-			average_dist /= _graph[i.first].size();
+			else {
+				for (auto edge : edges) {
+					if (edge._to_id == v) {
+						all_distance = edge._distance;
+						count++;
+					}
+				}
+			}
+		}
+		return (all_distance / count);
+	}
+
+	Vertex find_max_average_distance() {
+		if (_graph.empty()) throw runtime_error("Graph is empty.");
+		Vertex max_average = _graph.begin()->first;
+		Distance max_average_dist = average_distance(_graph.begin()->first);
+		for (auto i : _graph) {
+			Distance average_dist = average_distance(i.first);
 			if (max_average_dist < average_dist) {
 				max_average = i.first;
 				max_average_dist = average_dist;
